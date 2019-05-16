@@ -95,6 +95,11 @@ int		show_winner(int start, char winner, int opt)
   return (my_putstr("Draw\n"));
 }
 
+int		show_turn(int start, int to_play, int opt)
+{
+  //giveup trop fatigue, je le ferai demain c'est pas dur mais j'suis perdu la xD
+}
+
 int		game(char board[3][3], int opt)
 {
   time_t	time_init;
@@ -110,8 +115,12 @@ int		game(char board[3][3], int opt)
     {
       //Faudra refaire cette fonction en ncurses
       my_show_board(board);
+      show_turn(start, to_play, opt);
       //Need l'input du joueur ici, a stocker dans pos, pos[0] = axe y, pos[1] = axe x
-      input(&pos);
+      if (opt == 1 || to_play == 0)
+	input(pos);
+      else
+	AI(board, pos, start == 1 ? 'x' : 'o');
       if (board[pos[0]][pos[1]] == ' ')
 	{
 	  board[pos[0]][pos[1]] = (start == to_play) ? 'x' : 'o';
