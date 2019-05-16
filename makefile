@@ -1,5 +1,7 @@
 SRC = 	./src/main.c			\
 	./src/check_av.c		\
+	./src/game.c			\
+	./src/my_show_board.c		\
 	./src/init.c			\
 	./src/my_putstr.c		\
 	./src/my_strlen.c		\
