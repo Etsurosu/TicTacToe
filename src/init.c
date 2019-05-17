@@ -1,4 +1,3 @@
-#include	"../inc/my_show_board.h"
 #include	"../inc/game.h"
 
 void	init_board(char board[3][3])
@@ -22,7 +21,6 @@ int	init(int opt)
   char	board[3][3];
 
   init_board(board);
-  my_show_board(board);
   game(board, opt);
   return (0);
 }
