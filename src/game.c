@@ -2,6 +2,8 @@
 #include	<stdlib.h>
 #include	"../inc/my_putstr.h"
 #include	"../inc/my_show_board.h"
+#include	"../inc/ai.h"
+#include	"../inc/input.h"
 
 char		check_lines(char board[3][3])
 {
@@ -120,7 +122,7 @@ int		game(char board[3][3], int opt)
       if (opt == 1 || to_play == 0)
 	input(pos);
       else
-	AI(board, pos, start == 1 ? 'x' : 'o');
+	ai(board, pos, start == 1 ? 'x' : 'o');
       if (board[pos[0]][pos[1]] == ' ')
 	{
 	  board[pos[0]][pos[1]] = (start == to_play) ? 'x' : 'o';

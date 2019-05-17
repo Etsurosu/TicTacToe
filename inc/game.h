@@ -3,4 +3,4 @@
 
 int		game(char [3][3], int);
 
-#endif		/* __GANE_H__ */
+#endif		/* __GAME_H__ */

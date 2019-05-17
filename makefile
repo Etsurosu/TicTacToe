@@ -5,6 +5,8 @@ SRC = 	./src/main.c			\
 	./src/init.c			\
 	./src/my_putstr.c		\
 	./src/my_strlen.c		\
+	./src/ai.c			\
+	./src/input.c			\
 
 NAME = TicTacToe
 
