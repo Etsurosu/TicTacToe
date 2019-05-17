@@ -1,6 +1,8 @@
 #include	"../inc/check_av.h"
 #include	"../inc/init.h"
 #include	"../inc/my_putstr.h"
+#include	"../inc/input.h"
+#include	<time.h>
 
 int	main(int ac, char **av)
 {
