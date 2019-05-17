@@ -5,6 +5,8 @@
 #include	"../inc/ai.h"
 #include	"../inc/input.h"
 
+#include	<unistd.h>
+
 char		check_lines(char board[3][3])
 {
   int		i;
@@ -37,7 +39,7 @@ char		check_columns(char board[3][3])
   while (i < 3)
     {
       j = 0;
-      first = board[j++][i++];
+      first = board[j++][i];
       while (j < 3 && first != ' ' && first == board[j][i])
 	j++;
       if (j == 3)
@@ -52,7 +54,9 @@ char		check_diags(char board[3][3])
   char		first;
 
   first = board[1][1];
-  if (first != ' ' && first == board[0][0] && first == board [0][2])
+  if (first != ' ' &&
+      ((first == board[0][0] && first == board [2][2]) ||
+       (first == board[0][2] && first == board[2][0])))
     return (first);
   return (' ');
 }
@@ -97,9 +101,13 @@ int		show_winner(int start, char winner, int opt)
   return (my_putstr("Draw\n"));
 }
 
-int		show_turn(int start, int to_play, int opt)
+int		show_turn(int to_play, int opt)
 {
-  //giveup trop fatigue, je le ferai demain c'est pas dur mais j'suis perdu la xD
+  if (to_play == 0)
+    return (my_putstr("Player1 it\' your turn to play\n"));
+  if (opt == 1)
+    return (my_putstr("Player2 it\' your turn to play\n"));
+  return (my_putstr("AI\'s turn\n"));
 }
 
 int		game(char board[3][3], int opt)
@@ -115,9 +123,10 @@ int		game(char board[3][3], int opt)
   to_play = start;
   while ((ret = check_win(board)) == ' ')
     {
+      sleep(1);
       //Faudra refaire cette fonction en ncurses
       my_show_board(board);
-      show_turn(start, to_play, opt);
+      show_turn(to_play, opt);
       //Need l'input du joueur ici, a stocker dans pos, pos[0] = axe y, pos[1] = axe x
       if (opt == 1 || to_play == 0)
 	input(pos);
@@ -125,8 +134,7 @@ int		game(char board[3][3], int opt)
 	ai(board, pos, start == 1 ? 'x' : 'o');
       if (board[pos[0]][pos[1]] == ' ')
 	{
-	  board[pos[0]][pos[1]] = (start == to_play) ? 'x' : 'o';
-	  to_play++;
+	  board[pos[0]][pos[1]] = (start == to_play++) ? 'x' : 'o';
 	  to_play %= 2;
 	}
       else

@@ -8,7 +8,7 @@ int	main(int ac, char **av)
 {
   int	ret;
 
-  if (ac == 2 && (ret = check_av(av[1]))) //TO_CHECK
+  if (ac == 2 && (ret = check_av(av[1])))
     return (init(ret));
   my_putstr("Usage: [difficulty level]\n\t1 means player vs player\n\t2 means player vs AI\n");
   return (0);
