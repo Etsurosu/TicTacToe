@@ -8,6 +8,7 @@ void init_win_params(WIN *p_win)
 {
   p_win->height = 5;
   p_win->width = 5;
+  p_win->prev = ' ';
   p_win->starty = (LINES - p_win->height)/2;	
   p_win->startx = (COLS - p_win->width)/2;
   p_win->posx = 0;
@@ -50,18 +51,25 @@ void create_box(WIN *p_win, bool flag)
 
 void	move_in_board(WIN *p_win, int x, int y)
 {
-  if (((p_win->posy + x) >= 0 || (p_win->posy + x) <= 2) ||
-      ((p_win->posx + y) >= 0 || (p_win->posx + y) <= 2))
-    {
-      p_win->board[p_win->posy][p_win->posx] = p_win->prev;
-      p_win->posx += x;
-      p_win->posy += y;
-      p_win->prev = p_win->board[p_win->posy][p_win->posx];
-      p_win->board[p_win->posy][p_win->posx] = '*';
-    }
+  int ox = p_win->posy, oy = p_win->posx;
+
+  
+  if (x != 0 && (ox + x) <= 2 && (ox + x) >= 0){
+    p_win->board[ox][oy] = p_win->prev;
+    ox += x;
+    p_win->prev = p_win->board[ox][oy];
+    p_win->posx = ox;
+  }
+  else if (y != 0 && (oy + y) <= 2 && (oy + y) >= 0){
+    p_win->board[oy][oy] = p_win->prev;
+    oy += y;
+    p_win->prev = p_win->board[oy][oy];
+    p_win->posy = oy;
+
+  }
 }
 
-void	init_curses(WIN win)
+void	init_curses(WIN *win)
 {
   int ch;
 
@@ -74,43 +82,45 @@ void	init_curses(WIN win)
   init_pair(1, COLOR_CYAN, COLOR_BLACK);
 
   /* Initialize the window parameters */
-  init_win_params(&win);
+  init_win_params(win);
 
   attron(COLOR_PAIR(1));
   printw("Press echap to exit");
   refresh();
   attroff(COLOR_PAIR(1));
   
-  create_box(&win, TRUE);
-  move_in_board(&win, 0, 0);
+  create_box(win, TRUE);
+  move_in_board(win, 0, 0);
   while((ch = getch()) != 27)
     {
       switch(ch)
       	{
 	case KEY_LEFT:
-	  create_box(&win, FALSE);
-	  move_in_board(&win, -1, 0);
+	  create_box(win, FALSE);
+	  move_in_board(win, -1, 0);
 	  //	  --win.startx;
-	  create_box(&win, TRUE);
+	  create_box(win, TRUE);
 	  break;
       	case KEY_RIGHT:
-      	  create_box(&win, FALSE);
-	  move_in_board(&win, 1, 0);
+      	  create_box(win, FALSE);
+	  move_in_board(win, 1, 0);
       	  //++win.startx;
-      	  create_box(&win, TRUE);
+      	  create_box(win, TRUE);
       	  break;
       	case KEY_UP:
-      	  create_box(&win, FALSE);
-	  move_in_board(&win, 0, -1);
+      	  create_box(win, FALSE);
+	  move_in_board(win, 0, -1);
 	  //      	  --win.starty;
-      	  create_box(&win, TRUE);
+      	  create_box(win, TRUE);
       	  break;
       	case KEY_DOWN:
-      	  create_box(&win, FALSE);
-	  move_in_board(&win, 0, 1);
+      	  create_box(win, FALSE);
+	  move_in_board(win, 0, 1);
 	  //      	  ++win.starty;
-      	  create_box(&win, TRUE);
+      	  create_box(win, TRUE);
       	  break;
+	/* case ' ': */
+	  
       	}
     }
   endwin();

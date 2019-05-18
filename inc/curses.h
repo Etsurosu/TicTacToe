@@ -19,6 +19,6 @@ typedef struct _WIN_struct {
 }WIN;
 
 
-void	init_curses(WIN win);
+void	init_curses(WIN *win);
 
 #endif		/* __CURSES_H__ */
