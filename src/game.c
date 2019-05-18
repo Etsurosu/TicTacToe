@@ -32,7 +32,7 @@ char		check_columns(char board[3][3])
   int		i;
   int		j;
   char		first;
-  
+
   i = 0;
   j = 0;
   while (i < 3)
@@ -82,13 +82,11 @@ char		check_win(char board[3][3])
 {
   char		ret;
 
-  if ((ret = check_lines(board)) != ' ') {
-    write (1, "fdp\n", 4);
+  if ((ret = check_lines(board)) != ' ')
     return (ret);
-  }
-  else if ((ret = check_columns(board)) != ' ')
+  if ((ret = check_columns(board)) != ' ')
     return (ret);
-  else if (ret = check_diags(board) != ' ')
+  if ((ret = check_diags(board)) != ' ')
     return (ret);
   return (check_full(board));
 }
@@ -105,9 +103,9 @@ int		show_winner(int start, char winner, int opt)
 int		show_turn(int to_play, int opt)
 {
   if (to_play == 0)
-    return (my_putstr("Player1 it\' your turn to play\n"));
+    return (my_putstr("Player1 it\'s your turn to play\n"));
   if (opt == 1)
-    return (my_putstr("Player2 it\' your turn to play\n"));
+    return (my_putstr("Player2 it\'s your turn to play\n"));
   return (my_putstr("AI\'s turn\n"));
 }
 
