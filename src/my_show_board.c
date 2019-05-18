@@ -22,13 +22,7 @@ void    my_show_board(char board[3][3])
     tmp[i] = '|';
           else
             tmp[i] = board[j / 2][i / 2];
-      mvprintw(30, 30, tmp);/* Move to (y, x) then print string     */
-      //printw(tmp);        /* Print on stdscr at present cursor position */
-      //wprintw(win, tmp);  /* Print on window win at present cursor position */
-                           /* in the window */
-      //mvwprintw(win, 200, 200, tmp);   /* Move to (y, x) relative to window */
-                                    /* co-ordinates and then print         */
-      //my_putstr(tmp);
+      my_putstr(tmp);
     }
   return ;
 }

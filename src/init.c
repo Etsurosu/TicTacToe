@@ -17,12 +17,13 @@ void	init_board(char board[3][3])
   return ;
 }
 
-int	init(int opt)
+int	init(int opt, WIN *win)
 {
   char	board[3][3];
 
-  init_board(board);
-  init_curses(board);
-  //game(board, opt);
+  init_board(/* win-> */board);
+  //init_curses(win);
+  my_show_board(/* win-> */board);
+  game(/* win-> */board, opt);
   return (0);
 }

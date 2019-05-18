@@ -2,46 +2,21 @@
 #include	"../inc/my_show_board.h"
 #include	"string.h"
 #include	"stdlib.h"
-
-typedef struct _win_border_struct {
-  chtype 	ls, rs, ts, bs, 
-    tl, tr, bl, br;
-}WIN_BORDER;
-
-typedef struct _WIN_struct {
-
-  int startx, starty;
-  int height, width;
-  WIN_BORDER border;
-}WIN;
+#include	"unistd.h"
 
 void init_win_params(WIN *p_win)
 {
-  p_win->height = 3;
-  p_win->width = 10;
+  p_win->height = 5;
+  p_win->width = 5;
   p_win->starty = (LINES - p_win->height)/2;	
   p_win->startx = (COLS - p_win->width)/2;
-
-  p_win->border.ls = '|';
-  p_win->border.rs = '|';
-  p_win->border.ts = '-';
-  p_win->border.bs = '-';
-  p_win->border.tl = '+';
-  p_win->border.tr = '+';
-  p_win->border.bl = '+';
-  p_win->border.br = '+';
-
+  p_win->posx = 0;
+  p_win->posy = 0;
 }
-void print_win_params(WIN *p_win)
-{
-#ifdef _DEBUG
-  mvprintw(25, 0, "%d %d %d %d", p_win->startx, p_win->starty, 
-	   p_win->width, p_win->height);
-  refresh();
-#endif
-}
+
 void create_box(WIN *p_win, bool flag)
-{	int i, j;
+{
+  int i, j;
   int x, y, w, h;
 
   x = p_win->startx;
@@ -50,28 +25,44 @@ void create_box(WIN *p_win, bool flag)
   h = p_win->height;
 
   if(flag == TRUE)
-    {	mvaddch(y, x, p_win->border.tl);
-      mvaddch(y, x + w, p_win->border.tr);
-      mvaddch(y + h, x, p_win->border.bl);
-      mvaddch(y + h, x + w, p_win->border.br);
-      mvhline(y, x + 1, p_win->border.ts, w - 1);
-      mvhline(y + h, x + 1, p_win->border.bs, w - 1);
-      mvvline(y + 1, x, p_win->border.ls, h - 1);
-      mvvline(y + 1, x + w, p_win->border.rs, h - 1);
-
+    {
+      j = -1;
+      while (j++ < 5)
+	{
+	  i = -1;
+	  if (j % 2)
+	    while(++i < 5)
+	      mvaddch(y + j, x + i, '-');
+	  else
+	    while (++i < 5)
+	      if (i % 2)
+		mvaddch(y + j, x + i, '|');
+	      else
+		mvaddch(y + j, x + i, p_win->board[j / 2][i / 2]);
+	}
     }
   else
     for(j = y; j <= y + h; ++j)
       for(i = x; i <= x + w; ++i)
 	mvaddch(j, i, ' ');
-				
   refresh();
-
 }
 
-void	init_curses(char board[3][3])
+void	move_in_board(WIN *p_win, int x, int y)
 {
-  WIN win;
+  if (((p_win->posy + x) >= 0 || (p_win->posy + x) <= 2) ||
+      ((p_win->posx + y) >= 0 || (p_win->posx + y) <= 2))
+    {
+      p_win->board[p_win->posy][p_win->posx] = p_win->prev;
+      p_win->posx += x;
+      p_win->posy += y;
+      p_win->prev = p_win->board[p_win->posy][p_win->posx];
+      p_win->board[p_win->posy][p_win->posx] = '*';
+    }
+}
+
+void	init_curses(WIN win)
+{
   int ch;
 
   initscr();			/* Start curses mode 		*/
@@ -84,37 +75,43 @@ void	init_curses(char board[3][3])
 
   /* Initialize the window parameters */
   init_win_params(&win);
-  print_win_params(&win);
 
   attron(COLOR_PAIR(1));
   printw("Press echap to exit");
   refresh();
   attroff(COLOR_PAIR(1));
-	
+  
   create_box(&win, TRUE);
+  move_in_board(&win, 0, 0);
   while((ch = getch()) != 27)
-    {	switch(ch)
-	{	case KEY_LEFT:
-	    create_box(&win, FALSE);
-	    --win.startx;
-	    create_box(&win, TRUE);
-	    break;
-	case KEY_RIGHT:
+    {
+      switch(ch)
+      	{
+	case KEY_LEFT:
 	  create_box(&win, FALSE);
-	  ++win.startx;
+	  move_in_board(&win, -1, 0);
+	  //	  --win.startx;
 	  create_box(&win, TRUE);
 	  break;
-	case KEY_UP:
-	  create_box(&win, FALSE);
-	  --win.starty;
-	  create_box(&win, TRUE);
-	  break;
-	case KEY_DOWN:
-	  create_box(&win, FALSE);
-	  ++win.starty;
-	  create_box(&win, TRUE);
-	  break;	
-	}
+      	case KEY_RIGHT:
+      	  create_box(&win, FALSE);
+	  move_in_board(&win, 1, 0);
+      	  //++win.startx;
+      	  create_box(&win, TRUE);
+      	  break;
+      	case KEY_UP:
+      	  create_box(&win, FALSE);
+	  move_in_board(&win, 0, -1);
+	  //      	  --win.starty;
+      	  create_box(&win, TRUE);
+      	  break;
+      	case KEY_DOWN:
+      	  create_box(&win, FALSE);
+	  move_in_board(&win, 0, 1);
+	  //      	  ++win.starty;
+      	  create_box(&win, TRUE);
+      	  break;
+      	}
     }
-  endwin();			/* End curses mode		  */
+  endwin();
 }

@@ -83,8 +83,10 @@ char		check_win(char board[3][3])
 {
   char		ret;
 
-  if ((ret = check_lines(board)) != ' ')
+  if ((ret = check_lines(board)) != ' ') {
+    write (1, "fdp\n", 4);
     return (ret);
+  }
   else if ((ret = check_columns(board)) != ' ')
     return (ret);
   else if (ret = check_diags(board) != ' ')
