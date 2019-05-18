@@ -7,6 +7,7 @@ SRC = 	./src/main.c			\
 	./src/my_strlen.c		\
 	./src/ai.c			\
 	./src/input.c			\
+	./src/curses.c			\
 
 NAME = TicTacToe
 
@@ -19,12 +20,13 @@ RM = rm -rf
 all :	$(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+	$(CC) $(OBJ) -o $(NAME) -lncurses
 
 clean :
 	rm -rf $(OBJ)
 
 fclean : clean
 	rm -rf $(NAME)
+	rm -rf ./src/*~
 
 re : fclean all
