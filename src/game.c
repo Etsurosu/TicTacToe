@@ -13,6 +13,7 @@ char		check_lines(char board[3][3])
   
   i = 0;
   j = 0;
+  my_show_board(board);
   while (i < 3)
     {
       j = 0;
