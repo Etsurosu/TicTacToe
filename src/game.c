@@ -5,8 +5,6 @@
 #include	"../inc/ai.h"
 #include	"../inc/input.h"
 
-#include	<unistd.h>
-
 char		check_lines(char board[3][3])
 {
   int		i;
