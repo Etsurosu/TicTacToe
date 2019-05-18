@@ -31,7 +31,7 @@ char		check_columns(char board[3][3])
   int		i;
   int		j;
   char		first;
-  
+
   i = 0;
   j = 0;
   while (i < 3)
@@ -85,18 +85,21 @@ char		check_win(char board[3][3])
     return (ret);
   else if ((ret = check_columns(board)) != ' ')
     return (ret);
-  else if (ret = check_diags(board) != ' ')
+  if ((ret = check_diags(board)) != ' ')
     return (ret);
   return (check_full(board));
 }
 
-int		show_winner(int start, char winner, int opt)
+int		show_winner(int start, char winner, int opt, WIN *win)
 {
   if (start == 0 && winner == 'x')
-    return (mvprintw(0, 0, "Player1 is the winner\n"));
+    mvprintw(0, 0, "Player1 is the winner\n");
   else if (winner == 'o')
-    return (mvprintw(0, 0, opt == 1 ? "Player2 is the winner\n" : "AI is the winner\n"));
-  return (mvprintw(0, 0, "Draw\n"));
+    mvprintw(0, 0, opt == 1 ? "Player2 is the winner\n" : "AI is the winner\n");
+  else
+    mvprintw(0, 0, "Draw\n");
+  if (input(&opt, win) == -1)
+    return (0);
 }
 
 int		show_turn(int to_play, int opt)
@@ -140,6 +143,6 @@ int		game(char board[3][3], int opt, WIN *win)
 	mvprintw(0, 0, "You can't play here\n");
       refresh();
     }
-  show_winner(start, ret, opt);
+  show_winner(start, ret, opt,win);
   return (0);
 }
