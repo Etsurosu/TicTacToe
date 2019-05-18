@@ -23,6 +23,7 @@ int	init(int opt, WIN *win)
 
   init_board(win->board);
   init_curses(win);
-  //game(win->board, opt);
+  game(win->board, opt, win);
+  endwin();
   return (0);
 }

@@ -22,7 +22,8 @@ void    my_show_board(char board[3][3])
     tmp[i] = '|';
           else
             tmp[i] = board[j / 2][i / 2];
-      my_putstr(tmp);
+      dprintf(2, tmp);
+      //my_putstr(tmp);
     }
   return ;
 }

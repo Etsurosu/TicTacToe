@@ -55,24 +55,17 @@ void	move_in_board(WIN *p_win, int x, int y)
 
   
   if (y != 0 && (ox + y) <= 2 && (ox + y) >= 0){
-    p_win->board[ox][oy] = p_win->prev;
     ox += y;
-    p_win->prev = p_win->board[ox][oy];
   }
   else if (x != 0 && (oy + x) <= 2 && (oy + x) >= 0){
-    p_win->board[ox][oy] = p_win->prev;
     oy += x;
-    p_win->prev = p_win->board[ox][oy];
   }
   p_win->posx = ox;
   p_win->posy = oy;
-  p_win->board[ox][oy] = '*';
 }
 
 void	init_curses(WIN *win)
 {
-  int ch;
-
   initscr();			/* Start curses mode 		*/
   start_color();			/* Start the color functionality */
   cbreak();			/* Line buffering disabled, Pass on
@@ -85,43 +78,9 @@ void	init_curses(WIN *win)
   init_win_params(win);
 
   attron(COLOR_PAIR(1));
-  printw("Press echap to exit");
   refresh();
   attroff(COLOR_PAIR(1));
   
   create_box(win, TRUE);
   move_in_board(win, 0, 0);
-  while((ch = getch()) != 27)
-    {
-      switch(ch)
-      	{
-	case KEY_LEFT:
-	  create_box(win, FALSE);
-	  move_in_board(win, -1, 0);
-	  //	  --win.startx;
-	  create_box(win, TRUE);
-	  break;
-      	case KEY_RIGHT:
-      	  create_box(win, FALSE);
-	  move_in_board(win, 1, 0);
-      	  //++win.startx;
-      	  create_box(win, TRUE);
-      	  break;
-      	case KEY_UP:
-      	  create_box(win, FALSE);
-	  move_in_board(win, 0, -1);
-	  //      	  --win.starty;
-      	  create_box(win, TRUE);
-      	  break;
-      	case KEY_DOWN:
-      	  create_box(win, FALSE);
-	  move_in_board(win, 0, 1);
-	  //      	  ++win.starty;
-      	  create_box(win, TRUE);
-      	  break;
-	case ' ':
-	  
-      	}
-    }
-  endwin();
 }

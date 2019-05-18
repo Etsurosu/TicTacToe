@@ -13,7 +13,6 @@ char		check_lines(char board[3][3])
   
   i = 0;
   j = 0;
-  my_show_board(board);
   while (i < 3)
     {
       j = 0;
@@ -82,10 +81,8 @@ char		check_win(char board[3][3])
 {
   char		ret;
 
-  if ((ret = check_lines(board)) != ' ') {
-    write (1, "fdp\n", 4);
+  if ((ret = check_lines(board)) != ' ')
     return (ret);
-  }
   else if ((ret = check_columns(board)) != ' ')
     return (ret);
   else if (ret = check_diags(board) != ' ')
@@ -96,22 +93,22 @@ char		check_win(char board[3][3])
 int		show_winner(int start, char winner, int opt)
 {
   if (start == 0 && winner == 'x')
-    return (my_putstr("Player1 is the winner\n"));
+    return (mvprintw(0, 0, "Player1 is the winner\n"));
   else if (winner == 'o')
-    return (my_putstr(opt == 1 ? "Player2 is the winner\n" : "AI is the winner\n"));
-  return (my_putstr("Draw\n"));
+    return (mvprintw(0, 0, opt == 1 ? "Player2 is the winner\n" : "AI is the winner\n"));
+  return (mvprintw(0, 0, "Draw\n"));
 }
 
 int		show_turn(int to_play, int opt)
 {
   if (to_play == 0)
-    return (my_putstr("Player1 it\' your turn to play\n"));
+    return (mvprintw(0, 0, "Player1 it\'s your turn to play\n"));
   if (opt == 1)
-    return (my_putstr("Player2 it\' your turn to play\n"));
-  return (my_putstr("AI\'s turn\n"));
+    return (mvprintw(0, 0, "Player2 it\'s your turn to play\n"));
+  return (mvprintw(0, 0, "AI\'s turn\n"));
 }
 
-int		game(char board[3][3], int opt)
+int		game(char board[3][3], int opt, WIN *win)
 {
   time_t	time_init;
   int		start;
@@ -122,25 +119,27 @@ int		game(char board[3][3], int opt)
   srand((unsigned)time(&time_init));
   start = rand() % 2;
   to_play = start;
-  while ((ret = check_win(board)) == ' ')
+  while ((ret = check_win(win->board)) == ' ')
     {
-      //Faudra refaire cette fonction en ncurses
-      my_show_board(board);
       show_turn(to_play, opt);
-      //Need l'input du joueur ici, a stocker dans pos, pos[0] = axe y, pos[1] = axe x
       if (opt == 1 || to_play == 0)
-	input(pos);
-      else
-	ai(board, pos, start == 1 ? 'x' : 'o');
-      if (board[pos[0]][pos[1]] == ' ')
 	{
-	  board[pos[0]][pos[1]] = (start == to_play++) ? 'x' : 'o';
+	  if (input(pos, win) == -1)
+	    return (0);
+	}
+      else
+	ai(win->board, pos, start == 1 ? 'x' : 'o');
+      my_show_board(win->board);
+      if (win->board[pos[0]][pos[1]] == ' ')
+	{
+	  win->board[pos[0]][pos[1]] = (start == to_play++) ? 'x' : 'o';
+	  dprintf(2, "added [%d][%d]\n", pos[0], pos[1]);
 	  to_play %= 2;
 	}
       else
-	my_putstr("You can't play here\n"); //si t'es chaud en ncurses aussi ;)
+	mvprintw(0, 0, "You can't play here\n");
+      refresh();
     }
-  // si tu te sens chaud tu peux refaire cette fonction en ncurses
   show_winner(start, ret, opt);
   return (0);
 }

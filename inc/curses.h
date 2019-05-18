@@ -20,5 +20,7 @@ typedef struct _WIN_struct {
 
 
 void	init_curses(WIN *win);
+void create_box(WIN *p_win, bool flag);
+void	move_in_board(WIN *p_win, int x, int y);
 
 #endif		/* __CURSES_H__ */
