@@ -47,8 +47,10 @@ void		ai(char board[3][3], int pos[2], char letter)
     return ;
   if (try_deny(board, pos, letter))
   return ;*/
-  pos[0] = rand() % 3;
-  srand((unsigned)time(&time_init));
-  pos[1] = rand() % 3;
+  while (board[pos[0]][pos[1]] != ' '){
+	pos[0] = rand() % 3;
+	srand((unsigned)time(&time_init));
+	pos[1] = rand() % 3;
+      }
   return ;
 }

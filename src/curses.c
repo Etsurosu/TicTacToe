@@ -73,6 +73,7 @@ void	init_curses(WIN *win)
   keypad(stdscr, TRUE);		/* I need that nifty F1 	*/
   noecho();
   init_pair(1, COLOR_CYAN, COLOR_BLACK);
+  mvprintw(0, 0, "Press Escape to leave");
 
   /* Initialize the window parameters */
   init_win_params(win);

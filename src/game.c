@@ -92,23 +92,27 @@ char		check_win(char board[3][3])
 
 int		show_winner(int start, char winner, int opt, WIN *win)
 {
-  if (start == 0 && winner == 'x')
-    mvprintw(0, 0, "Player1 is the winner\n");
-  else if (winner == 'o')
-    mvprintw(0, 0, opt == 1 ? "Player2 is the winner\n" : "AI is the winner\n");
+  if (start == 0 && winner == 'x' || start == 1 && winner == 'o')
+    mvprintw,(win->starty - 2, win->startx - 3, "Player1 is the winner\n");
+  else if (start == 0 && winner == 'o')
+    mvprintw(win->starty - 2, win->startx - 3, opt == 1 ? "Player2 is the winner\n" : "AI is the winner\n");
   else
-    mvprintw(0, 0, "Draw\n");
+    mvprintw(win->starty - 2, win->startx - 3, "Draw\n");
   if (input(&opt, win) == -1)
     return (0);
+  return (0);
 }
 
-int		show_turn(int to_play, int opt)
+int		show_turn(int to_play, int opt, WIN *win)
 {
   if (to_play == 0)
-    return (mvprintw(0, 0, "Player1 it\'s your turn to play\n"));
+    {
+      mvprintw(win->starty - 2, win->startx - 3, "Player1 it\'s your turn to play\n");
+      return (0);
+    }
   if (opt == 1)
-    return (mvprintw(0, 0, "Player2 it\'s your turn to play\n"));
-  return (mvprintw(0, 0, "AI\'s turn\n"));
+    return (mvprintw(win->starty - 2, win->startx - 3, "Player2 it\'s your turn to play\n"));
+  return (mvprintw(win->starty - 2, win->startx - 3, "AI\'s turn\n"));
 }
 
 int		game(char board[3][3], int opt, WIN *win)
@@ -124,7 +128,7 @@ int		game(char board[3][3], int opt, WIN *win)
   to_play = start;
   while ((ret = check_win(win->board)) == ' ')
     {
-      show_turn(to_play, opt);
+      show_turn(to_play, opt, win);
       if (opt == 1 || to_play == 0)
 	{
 	  if (input(pos, win) == -1)
@@ -132,11 +136,10 @@ int		game(char board[3][3], int opt, WIN *win)
 	}
       else
 	ai(win->board, pos, start == 1 ? 'x' : 'o');
-      my_show_board(win->board);
+      refresh();
       if (win->board[pos[0]][pos[1]] == ' ')
 	{
 	  win->board[pos[0]][pos[1]] = (start == to_play++) ? 'x' : 'o';
-	  dprintf(2, "added [%d][%d]\n", pos[0], pos[1]);
 	  to_play %= 2;
 	}
       else
