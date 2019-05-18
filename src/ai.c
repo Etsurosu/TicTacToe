@@ -1,3 +1,4 @@
+#include	<time.h>
 #include	<stdbool.h>
 #include	<stdlib.h>
 #include	"../inc/ai.h"
@@ -38,6 +39,8 @@ bool		try_deny(char board[3][3], int pos[2], char letter)
 
 void		ai(char board[3][3], int pos[2], char letter)
 {
+  time_t	time_init;
+  
   if (is_board_empty(board))
     return (set_pos(pos, 0, 0));
   /*  if (try_win(board, pos, letter))
@@ -45,6 +48,7 @@ void		ai(char board[3][3], int pos[2], char letter)
   if (try_deny(board, pos, letter))
   return ;*/
   pos[0] = rand() % 3;
+  srand((unsigned)time(&time_init));
   pos[1] = rand() % 3;
   return ;
 }

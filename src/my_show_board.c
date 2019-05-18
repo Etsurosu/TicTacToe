@@ -1,4 +1,5 @@
 #include	"../inc/my_putstr.h"
+#include	"../inc/curses.h"
 
 void    my_show_board(char board[3][3])
 {

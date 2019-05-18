@@ -1,4 +1,5 @@
 #include	"../inc/game.h"
+#include	"../inc/curses.h"
 
 void	init_board(char board[3][3])
 {
@@ -10,17 +11,19 @@ void	init_board(char board[3][3])
     {
       j = 0;
       while (j < 3)
-	board[i][j++] = ' ';
+	board[i][j++] = '-';
       i++;
     }
   return ;
 }
 
-int	init(int opt)
+int	init(int opt, WIN *win)
 {
   char	board[3][3];
 
-  init_board(board);
-  game(board, opt);
+  init_board(/* win-> */board);
+  //init_curses(win);
+  my_show_board(/* win-> */board);
+  game(/* win-> */board, opt);
   return (0);
 }

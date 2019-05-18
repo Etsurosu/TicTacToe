@@ -1,6 +1,8 @@
 #ifndef		INIT_H_
  #define	INIT_H_
 
-int		init(int);
+#include "curses.h"
+
+int		init(int, WIN *win);
 
 #endif		/* __INIT_H__ */
