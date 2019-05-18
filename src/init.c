@@ -19,10 +19,10 @@ void	init_board(char board[3][3])
 
 int	init(int opt, WIN *win)
 {
-  char	board[3][3];
+  //char	board[3][3];
 
   init_board(win->board);
-  //init_curses(win);
-  game(win->board, opt);
+  init_curses(win);
+  //game(win->board, opt);
   return (0);
 }

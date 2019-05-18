@@ -51,22 +51,22 @@ void create_box(WIN *p_win, bool flag)
 
 void	move_in_board(WIN *p_win, int x, int y)
 {
-  int ox = p_win->posy, oy = p_win->posx;
+  int ox = p_win->posx, oy = p_win->posy;
 
   
-  if (x != 0 && (ox + x) <= 2 && (ox + x) >= 0){
+  if (y != 0 && (ox + y) <= 2 && (ox + y) >= 0){
     p_win->board[ox][oy] = p_win->prev;
-    ox += x;
+    ox += y;
     p_win->prev = p_win->board[ox][oy];
-    p_win->posx = ox;
   }
-  else if (y != 0 && (oy + y) <= 2 && (oy + y) >= 0){
-    p_win->board[oy][oy] = p_win->prev;
-    oy += y;
-    p_win->prev = p_win->board[oy][oy];
-    p_win->posy = oy;
-
+  else if (x != 0 && (oy + x) <= 2 && (oy + x) >= 0){
+    p_win->board[ox][oy] = p_win->prev;
+    oy += x;
+    p_win->prev = p_win->board[ox][oy];
   }
+  p_win->posx = ox;
+  p_win->posy = oy;
+  p_win->board[ox][oy] = '*';
 }
 
 void	init_curses(WIN *win)
@@ -119,7 +119,7 @@ void	init_curses(WIN *win)
 	  //      	  ++win.starty;
       	  create_box(win, TRUE);
       	  break;
-	/* case ' ': */
+	case ' ':
 	  
       	}
     }

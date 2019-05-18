@@ -126,7 +126,6 @@ int		game(char board[3][3], int opt)
   to_play = start;
   while ((ret = check_win(board)) == ' ')
     {
-      sleep(1);
       //Faudra refaire cette fonction en ncurses
       my_show_board(board);
       show_turn(to_play, opt);
